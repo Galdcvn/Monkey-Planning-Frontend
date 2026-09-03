@@ -33,6 +33,8 @@ export interface Room {
   players: Player[]
   tasks: Task[]
   activeTaskId: string | null
+  color: string
+  table: string
 }
 
 // Usuário local salvo na sessão.

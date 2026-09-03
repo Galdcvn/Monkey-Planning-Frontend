@@ -333,6 +333,8 @@ input {
   max-width: 560px;
   padding: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .clickup-modal > .field-error {
@@ -358,6 +360,9 @@ input {
 .clickup-content {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1 1 auto;
 }
 
 /* ---- Header ---- */
@@ -608,11 +613,271 @@ input {
   color: var(--text-h);
 }
 
+/* ---------- Room settings modal ---------- */
+.room-settings {
+  max-width: 480px;
+  overflow: hidden;
+}
+
+.room-settings-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.room-settings-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.room-settings-tab:hover {
+  color: var(--text-h);
+  background: var(--code-bg);
+}
+
+.room-settings-tab.active {
+  color: var(--accent);
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.room-settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.room-settings-note {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0;
+}
+
+.room-settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.room-settings-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.room-color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.room-color-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.room-color-dot:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.room-color-dot.selected {
+  border-color: var(--text-h);
+  outline: 3px solid var(--accent-border);
+}
+
+.room-color-dot:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.room-table-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.room-table-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--code-bg);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.room-table-option:hover:not(:disabled) {
+  border-color: var(--accent-border);
+  transform: translateY(-2px);
+}
+
+.room-table-option.selected {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.room-table-option:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.room-table-option img {
+  width: 100%;
+  height: 60px;
+  object-fit: contain;
+}
+
+.room-players {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.room-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.room-player.owner {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+
+.room-player-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--code-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.room-player-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.room-player-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.room-player-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.room-player-owner {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.room-player-status {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.room-player-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: #e5484d;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.room-player-remove:hover {
+  background: rgba(229, 72, 77, 0.12);
+  border-color: rgba(229, 72, 77, 0.4);
+}
+
 /* ---------- Room layout ---------- */
 .room {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease;
+}
+
+.room.theme-light {
+  background: linear-gradient(180deg, #f6f6f8 0%, #e8e8ee 100%);
+}
+
+.room.theme-dark {
+  background: linear-gradient(180deg, #1a1c23 0%, #0f1014 100%);
+}
+
+.room.theme-dark-blue {
+  background: linear-gradient(180deg, #16233a 0%, #0c1422 100%);
+}
+
+.room.theme-dark-purple {
+  background: linear-gradient(180deg, #241738 0%, #160e22 100%);
+}
+
+.room.theme-dark-green {
+  background: linear-gradient(180deg, #14281f 0%, #0a1c15 100%);
+}
+
+.room.theme-dark-red {
+  background: linear-gradient(180deg, #2e1a20 0%, #1c0d12 100%);
 }
 
 .room-header {
@@ -648,8 +913,48 @@ input {
   padding: 1px 6px;
 }
 
+.room-task-title {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
 .room-error {
   padding: 0 20px;
+}
+
+.room-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.room-settings-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.room-settings-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
 }
 
 .room-body {
@@ -673,6 +978,36 @@ input {
   margin-bottom: 12px;
 }
 
+.task-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.task-list-head .section-title {
+  margin-bottom: 0;
+}
+
+.task-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--code-bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.task-sort-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+}
+
 .create-task {
   background: var(--code-bg);
   border: 1px solid var(--border);
@@ -685,6 +1020,9 @@ input {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .task-list.empty .task-list-empty-text {
@@ -821,7 +1159,7 @@ input {
   justify-content: center;
 }
 
-/* Mesa de poker (elipse verde com borda) */
+/* Mesa de poker */
 .poker-table {
   position: relative;
   width: 82%;
@@ -834,28 +1172,9 @@ input {
   gap: 18px;
   padding: 24px;
   text-align: center;
-  background: radial-gradient(
-    ellipse at center,
-    #4ade80 0%,
-    #22c55e 55%,
-    #15803d 100%
-  );
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 40px rgba(0, 0, 0, 0.35),
-    0 12px 30px rgba(0, 0, 0, 0.25);
-}
-
-.poker-table::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 14px solid #7c2d12;
-  box-shadow:
-    inset 0 0 0 6px #b45309,
-    inset 0 0 20px rgba(0, 0, 0, 0.4);
-  pointer-events: none;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .poker-table > * {
@@ -863,8 +1182,32 @@ input {
   z-index: 1;
 }
 
+.poker-table.table-mesa1,
+.poker-table.table-mesa2,
+.poker-table.table-mesa3,
+.poker-table.table-mesa4,
+.poker-table.table-mesa5,
+.poker-table.table-mesa6,
+.poker-table.table-mesa7 {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.poker-table.table-mesa1 {
+  background-image: url("../assets/mesa1.png");
+}
+
+.poker-table.table-mesa2 {
+  background-image: url("../assets/mesa2.png");
+}
+
+.poker-table.table-mesa3 {
+  background-image: url("../assets/mesa3.png");
+}
+
 .poker-table .table-title {
-  color: #065f46;
+  color: #1ddda7;
   text-shadow: none;
   font-weight: 700;
 }
@@ -1137,9 +1480,27 @@ input {
   opacity: 0.95;
 }
 
+.seat-avatar {
+  position: relative;
+}
+
 .seat-avatar .avatar {
   position: static;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.seat-dealer {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  background: var(--bg);
+  object-fit: contain;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 9;
 }
 
 .seat-remove {
@@ -1228,6 +1589,10 @@ input {
     order: 2;
   }
 
+  .task-list {
+    max-height: 320px;
+  }
+
   .table-area {
     order: 1;
   }
@@ -1264,6 +1629,18 @@ input {
     width: 38px;
     height: 38px;
     font-size: 22px;
+  }
+
+  .seat-dealer {
+    width: 20px;
+    height: 20px;
+    top: -2px;
+    right: -2px;
+  }
+
+  .room-task-title {
+    max-width: 160px;
+    font-size: 12px;
   }
 
   .hand-card {

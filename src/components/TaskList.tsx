@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Socket } from "socket.io-client";
-import { Eye, SquarePen, Trash2 } from "lucide-react";
+import { ArrowUpDown, Eye, SquarePen, Trash2 } from "lucide-react";
 import type { ClickUpTaskDetails, Task } from "../lib/types";
 import { ClickUpTaskModal } from "./ClickUpTaskModal";
 
@@ -27,6 +27,8 @@ export function TaskList({
     loading: boolean;
     error: string;
   } | null>(null);
+
+  const [newestFirst, setNewestFirst] = useState(true);
 
   const activate = (taskId: string) =>
     socket.emit("task:activate", { roomId, taskId });
@@ -70,8 +72,22 @@ export function TaskList({
 
   return (
     <div className="task-list">
-      <h2 className="section-title">Tarefas</h2>
-      {[...tasks].reverse().map((task) => {
+      <div className="task-list-head">
+        <h2 className="section-title">Tarefas</h2>
+        <button
+          className="task-sort-btn"
+          onClick={() => setNewestFirst((v) => !v)}
+          title={
+            newestFirst
+              ? "Mais recentes primeiro"
+              : "Mais antigas primeiro"
+          }
+          aria-label="Inverter ordem das tarefas"
+        >
+          <ArrowUpDown size={16} />
+        </button>
+      </div>
+      {(newestFirst ? [...tasks].reverse() : [...tasks]).map((task) => {
         const isActive = task.id === activeTaskId;
         return (
           <div

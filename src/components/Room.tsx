@@ -1,12 +1,32 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import type { Socket } from "socket.io-client";
+import { Settings } from "lucide-react";
 import { CARDS } from "../lib/types";
 import type { Card, LocalUser, Player, Room, Task } from "../lib/types";
 import { Avatar } from "./Avatar";
 import { CreateTask } from "./CreateTask";
 import { TaskList } from "./TaskList";
+import { RoomSettingsModal } from "./RoomSettingsModal";
 import pokerLogo from "../assets/SprintPlanningPokerLogo.png";
+import dealerImg from "../assets/dealer.png";
+import mesa1 from "../assets/mesa1.png";
+import mesa2 from "../assets/mesa2.png";
+import mesa3 from "../assets/mesa3.png";
+import mesa4 from "../assets/mesa4.png";
+import mesa5 from "../assets/mesa5.png";
+import mesa6 from "../assets/mesa6.png";
+import mesa7 from "../assets/mesa7.png";
+
+const TABLE_IMAGES: Record<string, string> = {
+  mesa1,
+  mesa2,
+  mesa3,
+  mesa4,
+  mesa5,
+  mesa6,
+  mesa7,
+};
 
 interface RoomProps {
   socket: Socket;
@@ -21,6 +41,7 @@ export function Room({ socket, user, roomId, onLeave }: RoomProps) {
   const [myVote, setMyVote] = useState<Card | null>(null);
   const [revealCountdown, setRevealCountdown] = useState<number | null>(null);
   const [kicked, setKicked] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const revealRef = useRef<{ id: string; revealed: boolean } | null>(null);
 
   const userId = user.userId;
@@ -101,7 +122,7 @@ export function Room({ socket, user, roomId, onLeave }: RoomProps) {
   const players = room.players;
 
   return (
-    <div className="room">
+    <div className={`room theme-${room.color}`}>
       <header className="room-header">
         <div className="room-header-left">
           <h1 className="room-name">{room.name}</h1>
@@ -109,9 +130,20 @@ export function Room({ socket, user, roomId, onLeave }: RoomProps) {
             Sala <code>{room.id}</code>
           </p>
         </div>
-        <button className="btn btn-ghost" onClick={onLeave}>
-          Sair
-        </button>
+        {activeTask && <p className="room-task-title">{activeTask.title}</p>}
+        <div className="room-header-actions">
+          <button
+            className="room-settings-btn"
+            onClick={() => setShowSettings(true)}
+            title="Configurações da sala"
+            aria-label="Configurações da sala"
+          >
+            <Settings size={18} />
+          </button>
+          <button className="btn btn-ghost" onClick={onLeave}>
+            Sair
+          </button>
+        </div>
       </header>
 
       {error && <p className="field-error room-error">{error}</p>}
@@ -178,6 +210,15 @@ export function Room({ socket, user, roomId, onLeave }: RoomProps) {
             </button>
           </div>
         </div>
+      )}
+
+      {showSettings && (
+        <RoomSettingsModal
+          room={room}
+          socket={socket}
+          userId={userId}
+          onClose={() => setShowSettings(false)}
+        />
       )}
     </div>
   );
@@ -284,6 +325,14 @@ function PlayerSeat({
       </div>
       <div className="seat-avatar">
         <Avatar player={player} isMe={isMe} highlight={voted} />
+        {player.id === room.createdBy && (
+          <img
+            className="seat-dealer"
+            src={dealerImg}
+            alt="Dono da sala"
+            title="Dono da sala"
+          />
+        )}
       </div>
       {canRemove && (
         <button
@@ -342,13 +391,13 @@ function PokerTable({
         />
       ))}
 
-      <div className={`poker-table${revealed ? " revealed" : ""}`}>
-        {!activeTask && (
-          <div className="table-empty-text">
-            Crie uma tarefa e clique em <strong>Votar</strong> para começar.
-          </div>
-        )}
-
+      <div
+        className={`poker-table table-${room.table}${revealed ? " revealed" : ""}`}
+        style={{
+          backgroundColor: "transparent",
+          backgroundImage: `url(${TABLE_IMAGES[room.table] ?? TABLE_IMAGES.mesa3})`,
+        }}
+      >
         {activeTask && countdown !== null && countdown > 0 && (
           <div className="table-countdown">{countdown}</div>
         )}
@@ -363,7 +412,6 @@ function PokerTable({
 
         {activeTask && !revealed && (
           <>
-            <div className="table-title">{activeTask.title}</div>
             <button className="btn btn-primary" onClick={onReveal}>
               Revelar votos
             </button>
